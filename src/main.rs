@@ -97,23 +97,39 @@ async fn main() {
                             "No media links were found! Maybe this video has some limitations"
                         );
                     } else {
-                        let client = reqwest::blocking::Client::new();
                         let mut video: Vec<&(String, &Format)> = links
                             .iter()
-                            .filter(|a| {
-                                let status_code = client.head(&a.1 .0).send().unwrap().status();
-                                a.1 .1.get_height() != -1 && status_code == 200
-                            })
+                            .filter(|a| a.1 .1.get_height() != -1)
                             .map(|a| a.1)
                             .collect();
                         let mut audio: Vec<&(String, &Format)> = links
                             .iter()
-                            .filter(|a| {
-                                let status_code = client.head(&a.1 .0).send().unwrap().status();
-                                a.1 .1.get_height() == -1 && status_code == 200
-                            })
+                            .filter(|a| a.1 .1.get_height() == -1)
                             .map(|a| a.1)
                             .collect();
+                        let client = reqwest::Client::new();
+                        let mut delete = Vec::new();
+                        for i in 0..video.len() {
+                            if client.head(&video[i].0).send().await.unwrap().status() != 200 {
+                                delete.push(i);
+                            }
+                        }
+                        let mut m = 0;
+                        for x in delete {
+                            video.remove(x - m);
+                            m += 1;
+                        }
+                        let mut delete = Vec::new();
+                        for i in 0..audio.len() {
+                            if client.head(&audio[i].0).send().await.unwrap().status() != 200 {
+                                delete.push(i);
+                            }
+                        }
+                        let mut m = 0;
+                        for x in delete {
+                            audio.remove(x - m);
+                            m += 1;
+                        }
                         video.sort_by(|a, b| {
                             a.1.get_height().partial_cmp(&b.1.get_height()).unwrap()
                         });
@@ -130,7 +146,7 @@ async fn main() {
                         if (1..=2).contains(&number) {
                             match number {
                                 1 => {
-                                    if video.is_empty(){
+                                    if video.is_empty() {
                                         exit(0);
                                     }
                                     println!(
@@ -164,7 +180,7 @@ async fn main() {
                                     }
                                 }
                                 2 => {
-                                    if audio.is_empty(){
+                                    if audio.is_empty() {
                                         exit(0);
                                     }
                                     println!(
