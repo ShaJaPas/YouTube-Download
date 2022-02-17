@@ -74,7 +74,7 @@ fn read_number() -> i32 {
     return res.unwrap();
 }
 
-#[tokio::main]
+#[tokio::main(flavor = "current_thread")]
 async fn main() {
     let youtube_page_link =
         Regex::new("(http|https)://(www\\.|m.|)youtube\\.com/watch\\?v=(.+?)( |\\z|&)").unwrap();
