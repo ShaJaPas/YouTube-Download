@@ -17,7 +17,7 @@ use std::process::exit;
 /// YouTube video downloader, written in Rust
 #[derive(Parser, Debug)]
 #[clap(name = "yt_download")]
-#[clap(about = "A YouTube video downloader, for people who wants to download media from YouTUbe")]
+#[clap(about = "A YouTube video downloader, for people who wants to download media from YouTube")]
 struct Args {
     #[clap(subcommand)]
     command: Commands,
