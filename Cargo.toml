@@ -1,0 +1,17 @@
+[package]
+name = "yt_download"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+regex = "1.5.4"
+json = "0.12.4"
+lazy_static = "1.4.0"
+anyhow = "1.0.53"
+urlencoding = "2.1.0"
+clap = { version = "3.0.14", features = ["derive"] }
+reqwest = { version = "0.11.9", features = ["stream", "blocking"] }
+tokio = { version = "1.16.1", features = ["macros", "rt-multi-thread"] }
+futures-util = "0.3.21"
+indicatif = "0.16.2"
+
